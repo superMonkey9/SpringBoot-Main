@@ -1,0 +1,12 @@
+### GET 请求 - 查询用户列表
+GET http://localhost:8080/user/list
+
+### POST 请求 - 添加用户
+POST http://localhost:8080/user
+Content-Type: application/json
+
+{
+  "name": "赵六",
+  "age": 28,
+  "email": "zhaoliu@example.com"
+}

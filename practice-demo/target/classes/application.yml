@@ -1,0 +1,7 @@
+# ⭐ 配置文件：配置端口号等（初学阶段默认就行）
+server:
+  port: 8080
+
+spring:
+  application:
+    name: practice-demo
