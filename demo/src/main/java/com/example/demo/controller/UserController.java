@@ -55,20 +55,27 @@ public class UserController {
         return user;
     }
 
+
     // PUT http://localhost:8080/user
     // 请求体：{"id":1,"name":"张三改名","age":21}
     @PutMapping
     public User update(@RequestBody User user) {
-        // 实际项目中调用 service.update(user)
-        System.out.println("修改用户：" + user.getId());
+        // ⭐ 遍历列表，找到对应 ID 的用户，替换掉
+        for (int i = 0; i < userList.size(); i++) {
+            if (userList.get(i).getId().equals(user.getId())) {
+                userList.set(i, user);
+                break;
+            }
+        }
         return user;
     }
+
 
     // DELETE http://localhost:8080/user/3
     @DeleteMapping("/{id}")
     public String delete(@PathVariable Integer id) {
-        // 实际项目中调用 service.delete(id)
-        System.out.println("删除用户：" + id);
+        // ⭐ 从列表里删除对应 ID 的用户
+        userList.removeIf(u -> u.getId().equals(id));
         return "删除成功，id=" + id;
     }
 }

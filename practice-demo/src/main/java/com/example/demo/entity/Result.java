@@ -17,7 +17,7 @@ public class Result<T> {
     }
 
     // 成功（不带数据）
-    public static Result<Void> success() {
+    public static Result<Void> success()    {
         return success(null);
     }
 

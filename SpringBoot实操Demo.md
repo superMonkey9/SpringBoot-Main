@@ -1,7 +1,8 @@
 # Spring Boot 实操 Demo 手册
 
 > 本文件包含所有知识点的完整可运行代码示例，按学习路线组织，每个 Demo 都可以直接复制使用。
-> 最后更新：2026-05-12
+> 遇到不懂的 Java 语法？👉 [点击跳转到 Java 知识点](Java知识点.md)
+> 最后更新：2026-05-17
 
 ---
 
@@ -398,7 +399,7 @@ Content-Type: application/json
     "email": "zhaoliu@example.com"
 }
 ```
-
+    
 点击请求左边的绿色运行按钮即可发送请求。
 
 ### 测试工具三：Postman
@@ -424,19 +425,26 @@ Content-Type: application/json
 // 请求体：{"id":1,"name":"张三改名","age":21}
 @PutMapping
 public User update(@RequestBody User user) {
-    // 实际项目中调用 service.update(user)
-    System.out.println("修改用户：" + user.getId());
+    // ⭐ 遍历列表，找到对应 ID 的用户，替换掉
+    for (int i = 0; i < userList.size(); i++) {
+        if (userList.get(i).getId().equals(user.getId())) {
+            userList.set(i, user);  // 用新数据替换旧数据
+            break;
+        }
+    }
     return user;
 }
 
 // DELETE http://localhost:8080/user/3
 @DeleteMapping("/{id}")
 public String delete(@PathVariable Integer id) {
-    // 实际项目中调用 service.delete(id)
-    System.out.println("删除用户：" + id);
+    // ⭐ 从列表里删除对应 ID 的用户
+    userList.removeIf(u -> u.getId().equals(id));
     return "删除成功，id=" + id;
 }
 ```
+
+> ⭐ **注意：** PUT 和 DELETE 都是操作 Demo 3.2 里的 `userList`，修改和删除后用 GET 查询就能看到变化。
 
 **test.http 补充：**
 
@@ -455,6 +463,20 @@ Content-Type: application/json
 ### DELETE 请求 - 删除用户
 DELETE http://localhost:8080/user/3
 ```
+
+### 验证 PUT 和 DELETE 是否生效
+
+修改或删除后，用 GET 查询就能看到结果：
+
+```http
+### 验证：查询用户列表
+GET http://localhost:8080/user/list
+```
+
+| 操作 | 验证方式 | 预期结果 |
+|------|---------|---------|
+| PUT 修改了 id=1 的用户 | GET /user/list | 张三变成"张三改名" |
+| DELETE 删除了 id=3 的用户 | GET /user/list | 王五消失了，只剩 2 个用户 |
 
 ---
 
@@ -587,6 +609,71 @@ public Map<String, Object> testMix(
     return result;
 }
 ```
+
+### 验证
+
+在 `test.http` 文件中添加以下内容，点击绿色三角即可测试：
+
+```http
+### 测试 @RequestParam（基本用法）
+GET http://localhost:8080/param/test1?name=张三&age=20
+
+### 测试 @RequestParam（默认值）
+GET http://localhost:8080/param/test2?name=张三
+### 只传 name 不传 age，age 会用默认值 18
+
+### 测试 @RequestParam（可选参数）
+GET http://localhost:8080/param/test3?name=张三
+### 不传 age，返回"未知"
+
+### 测试 @RequestParam（模拟搜索分页）
+GET http://localhost:8080/param/test4?keyword=Spring&page=2&size=20
+
+### 测试 @PathVariable（单个）
+GET http://localhost:8080/param/user/5
+
+### 测试 @PathVariable（多个）
+GET http://localhost:8080/param/user/5/order/100
+
+### 测试 @RequestBody（用 Map 接收）
+POST http://localhost:8080/param/user
+Content-Type: application/json
+
+{
+    "name": "赵六",
+    "age": 28
+}
+
+### 测试 @RequestBody（用对象接收）
+POST http://localhost:8080/param/user2
+Content-Type: application/json
+
+{
+    "name": "赵六",
+    "age": 28,
+    "email": "zhaoliu@example.com"
+}
+
+### 测试混合参数（路径参数 + 请求体）
+POST http://localhost:8080/param/mix/5
+Content-Type: application/json
+
+{
+    "name": "张三",
+    "age": 20
+}
+```
+
+| 接口 | 测试方式 | 预期结果 |
+|------|---------|---------|
+| `test1` | 传 `?name=张三&age=20` | 返回"姓名：张三，年龄：20" |
+| `test2` | 只传 `?name=张三`，不传 age | 返回"姓名：张三，年龄：18"（默认值） |
+| `test3` | 只传 `?name=张三`，不传 age | 返回"姓名：张三，年龄：未知"（null） |
+| `test4` | 传 `?keyword=Spring&page=2` | 返回 JSON，含 page=2、size=10（默认） |
+| `/user/5` | 直接访问 | 返回"查询用户 id=5" |
+| `/user/5/order/100` | 直接访问 | 返回"用户 5 的订单 100" |
+| POST `/param/user` | 发 JSON | 返回 `{msg:"收到数据", data:{...}}` |
+| POST `/mix/5` | 发 JSON | 返回路径 id=5 和 user 对象 |
 
 ---
 
