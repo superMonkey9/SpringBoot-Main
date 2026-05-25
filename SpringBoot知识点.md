@@ -246,6 +246,52 @@ myapp/
 └── pom.xml                                  ← Maven 配置
 ```
 
+### ⭐ 2.1.1 resources 文件夹详解
+
+📁 **路径：`src/main/resources/`**
+
+**resources 文件夹 = 放"程序运行时需要读取的文件"，但不放 Java 代码。**
+
+```
+📁 src/main/resources/
+├── application.yml              ← 配置文件（端口号、数据库连接等）
+├── static/                      ← 静态资源（HTML、CSS、JS、图片）
+│   ├── index.html
+│   ├── style.css
+│   └── script.js
+├── mapper/                      ← MyBatis XML 文件（写 SQL 的地方）
+│   └── UserMapper.xml
+└── templates/                   ← 模板页面（Thymeleaf，暂时不用管）
+```
+
+**每个文件夹的作用：**
+
+| 文件夹/文件 | 放什么 | 你需要管吗 |
+|------------|--------|-----------|
+| `application.yml` | 项目配置（端口号、数据库地址等） | ✅ 要改 |
+| `static/` | 前端文件（HTML、CSS、JS、图片） | ⚠️ 以后做前端用 |
+| `mapper/` | MyBatis XML 文件（写 SQL） | ✅ 用 XML 方式时要创建 |
+| `templates/` | 模板页面（Thymeleaf） | ❌ 先不管 |
+
+**java/ 和 resources/ 的区别：**
+
+```
+java/        = 你的"菜谱"（代码逻辑，告诉程序怎么做）👨‍🍳
+resources/   = 你的"食材和调料"（配置、数据、前端页面）🥬
+
+菜谱告诉你怎么炒菜，食材决定炒出来什么味道
+```
+
+**resources 里的文件会被自动"打包"：**
+
+```
+你写代码时：            程序运行时：
+resources/        →    classpath（类路径）
+  application.yml       Spring Boot 自动读取
+  static/               浏览器可以直接访问
+  mapper/               MyBatis 自动扫描
+```
+
 ### 2.2 各层职责详解
 
 **请求处理的完整流程（必须记住）：**
@@ -1060,6 +1106,66 @@ public Result save(@RequestBody User user) {
 >
 > 👉 [点击跳转到实操 Demo 8：连接 MySQL 数据库](SpringBoot实操Demo.md#demo-8连接-mysql-数据库)
 
+### ⭐ 6.0 JDBC 是什么？
+
+**JDBC = Java 连接数据库的"桥梁"** 🌉
+
+Java 想跟 MySQL 说话，但它们语言不通——Java 说的是 Java 语，MySQL 说的是 SQL 语。JDBC 就是"翻译官"，帮它们互相沟通。
+
+```
+Java 代码 🇨🇳  →  JDBC（翻译官）  →  MySQL 数据库 🇺🇸
+```
+
+**JDBC 全称：** Java DataBase Connectivity（Java 数据库连接）
+
+**但是你不用直接用 JDBC！** 因为 MyBatis 帮你搞定了：
+
+```
+最原始的方式（麻烦）：
+  Java → JDBC → MySQL
+  你要自己写很多代码（Connection、PreparedStatement、ResultSet）才能查一条数据
+
+你用的方式（简单）：
+  Java → MyBatis → JDBC → MySQL
+  你只要写一个方法 + 一句 SQL 就行！
+```
+
+**你在项目里的依赖关系：**
+
+```
+你写的代码（很轻松）
+  @Select("SELECT * FROM user")
+  List<User> findAll();
+        │
+        ▼
+  MyBatis（帮你做了这些事）：
+  1. 用 JDBC 连接数据库
+  2. 发送 SQL 语句
+  3. 拿到结果
+  4. 把结果转成 User 对象
+  5. 返回给你
+        │
+        ▼
+  JDBC（底层工具，你不用管）
+        │
+        ▼
+  MySQL 数据库
+```
+
+**生活类比 🌉：**
+
+```
+你想去美国，有三种方式：
+
+1. 自己学英语（JDBC）→ 能沟通，但很累
+2. 找个翻译（MyBatis）→ 你说中文，翻译帮你沟通 ✅
+3. 用翻译 App（Spring Data JPA）→ 更简单，但那是以后的事
+
+你现在用的是 MyBatis = 找了个翻译，不用自己学 JDBC！
+```
+
+**一句话总结：** JDBC 是 Java 连数据库的底层工具，但你用了 MyBatis，MyBatis 帮你搞定了一切，你只要写 SQL 就行～ ✨
+
 ### 6.1 配置数据源
 
 在 `application.yml` 中配置数据库连接信息：
@@ -1120,6 +1226,72 @@ spring:
 
 > **`<scope>runtime</scope>` 解释：** 表示这个依赖只在运行时需要，编译时不需要。MySQL 驱动在代码里不会直接 import，只在运行时通过 JDBC URL 自动加载，所以用 runtime。
 
+### ⭐ 6.2.1 依赖的固定格式
+
+**所有依赖都是同一个格式，记住套路就行：**
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>   <!-- 谁做的（厂商/组织） -->
+    <artifactId>spring-boot-starter-web</artifactId>  <!-- 叫什么（工具名） -->
+    <version>3.0.3</version>                        <!-- 版本号（可选） -->
+</dependency>
+```
+
+**三个字段就像快递标签 📦：**
+
+| 字段 | 含义 | 比喻 |
+|------|------|------|
+| `<groupId>` | 谁做的 | 厂商名 |
+| `<artifactId>` | 叫什么 | 产品名 |
+| `<version>` | 几号版本 | 出厂日期 |
+
+**为什么有的要写 version，有的不用？**
+
+```xml
+<!-- ❌ 不用写 version（Spring Boot 官方出的，父项目自动管理版本） -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+
+<!-- ✅ 要写 version（第三方出的，没人帮你管版本） -->
+<dependency>
+    <groupId>org.mybatis.spring.boot</groupId>
+    <artifactId>mybatis-spring-boot-starter</artifactId>
+    <version>3.0.3</version>
+</dependency>
+```
+
+**怎么记？** Spring Boot 官方出的（`groupId` 是 `org.springframework.boot`）→ 不用写 version。其他人的 → 要写 version。
+
+**⚠️ 重要：加新依赖是"往里加"，不是"覆盖"！**
+
+```xml
+<!-- ✅ 正确：在原有依赖后面追加新的 -->
+<dependencies>
+    <!-- 保留原有的 -->
+    <dependency>
+        <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+        <artifactId>spring-boot-starter-test</artifactId>
+    </dependency>
+
+    <!-- 追加新的 -->
+    <dependency>
+        <artifactId>mysql-connector-j</artifactId>
+    </dependency>
+</dependencies>
+
+<!-- ❌ 错误：把原来的删了，只留新的！ -->
+<dependencies>
+    <dependency>
+        <artifactId>mysql-connector-j</artifactId>
+    </dependency>
+</dependencies>
+```
+
 ---
 
 ## 7. MyBatis（重点）
@@ -1146,6 +1318,88 @@ spring:
 > **MyBatis vs JDBC 的区别：**
 > - JDBC：需要手动写 `Connection`、`PreparedStatement`、`ResultSet`，代码繁琐
 > - MyBatis：你只需要写接口 + SQL，框架自动处理连接、参数设置、结果映射
+
+### ⭐ 7.1.1 Mapper 接口是什么？在哪里？
+
+**Mapper 接口 = 告诉 MyBatis"我要对数据库做什么操作"的方法清单** 📋
+
+📁 **写在 `mapper/UserMapper.java`（新建这个文件）**
+
+```java
+package com.example.demo.mapper;
+
+import com.example.demo.entity.User;
+import org.apache.ibatis.annotations.*;
+import java.util.List;
+
+@Mapper                                      // ⭐ 必须加！告诉 Spring"这是 MyBatis 的接口"
+public interface UserMapper {                // ← 接口（定义能做什么操作）
+
+    @Select("SELECT * FROM user")            // ← 查所有用户
+    List<User> findAll();
+
+    @Select("SELECT * FROM user WHERE id = #{id}")  // ← 根据 ID 查
+    User findById(Integer id);
+
+    @Insert("INSERT INTO user(name, age, email) VALUES(#{name}, #{age}, #{email})")  // ← 添加
+    void insert(User user);
+
+    @Update("UPDATE user SET name=#{name}, age=#{age}, email=#{email} WHERE id=#{id}")  // ← 修改
+    void update(User user);
+
+    @Delete("DELETE FROM user WHERE id = #{id}")    // ← 删除
+    void delete(Integer id);
+}
+```
+
+**每个方法对应什么 SQL？**
+
+| 方法名 | SQL 操作 | 干什么 |
+|--------|----------|--------|
+| `findAll()` | `SELECT * FROM user` | 查所有用户 |
+| `findById(id)` | `SELECT * WHERE id=?` | 查一个用户 |
+| `insert(user)` | `INSERT INTO user` | 添加用户 |
+| `update(user)` | `UPDATE user` | 修改用户 |
+| `delete(id)` | `DELETE FROM user` | 删除用户 |
+
+**`@Mapper` 注解的作用：**
+
+```
+@Mapper 就像一个"标签"，告诉 MyBatis：
+"这个接口是我的人，里面的方法都对应 SQL，你帮我自动实现！"
+
+没有 @Mapper → MyBatis 不认识这个接口，报错 ❌
+有 @Mapper   → MyBatis 自动扫描，帮你搞定 ✅
+```
+
+> **注意：** 每个 Mapper 接口都要加 `@Mapper`。或者在启动类上加 `@MapperScan("com.example.demo.mapper")` 一次扫描整个包，就不用每个接口都加了。
+
+**它在调用链里的位置：**
+
+```
+浏览器请求
+    ↓
+Controller（接请求）     "有人要查用户列表"
+    ↓
+Service（写逻辑）        "好，我去查"
+    ↓
+Mapper（查数据库）       "我告诉数据库：SELECT * FROM user"  ← 在这里！
+    ↓
+数据库返回数据
+```
+
+**生活类比 📋：**
+
+```
+Mapper 接口 = 餐厅的"菜单" 📜
+
+菜单上写着：
+  - 炒鸡蛋（findAll）     → 厨房（数据库）做一份炒鸡蛋
+  - 点一份炒鸡蛋（findById）→ 厨房根据编号做一份
+  - 加一个新菜（insert）   → 厨房做一道新菜
+
+你不用管厨房（数据库）怎么做，你只要点菜（调方法）就行！
+```
 
 ### 7.2 MyBatis 两种写 SQL 的方式
 
@@ -1184,51 +1438,111 @@ public interface UserMapper {
 
 📁 **Mapper 接口写在 `mapper/UserMapper.java`，SQL 写在 `resources/mapper/UserMapper.xml`**
 
+**⭐ 注解 vs XML 对比：**
+
 ```java
+// 方式一：注解（SQL 写在 Java 文件里）
 @Mapper
 public interface UserMapper {
+    @Select("SELECT * FROM user")         // ← SQL 在这里
     List<User> findAll();
-    User findById(Integer id);
-    void insert(User user);
 }
 ```
 
 ```xml
-<!-- resources/mapper/UserMapper.xml -->
+// 方式二：XML（SQL 写在单独的 XML 文件里）
+<mapper namespace="...UserMapper">
+    <select id="findAll" resultType="...User">
+        SELECT * FROM user               // ← SQL 在这里
+    </select>
+</mapper>
+```
+
+**效果完全一样！只是 SQL 写的位置不同。**
+
+**⭐ XML 文件结构逐行拆解：**
+
+```xml
+<!-- 第1行：XML 文件声明（固定写法，不用管） -->
 <?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 第2-3行：引入 MyBatis 的规则（固定写法，不用管） -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.myapp.mapper.UserMapper">
 
-    <!-- 查询所有 -->
-    <select id="findAll" resultType="com.example.myapp.entity.User">
+<!-- ⭐ 第4行：namespace = 告诉 MyBatis"这个 XML 对应哪个 Mapper 接口" -->
+<mapper namespace="com.example.demo.mapper.UserMapper">
+
+    <!-- 一个 <select> = 一条查询 SQL -->
+    <select id="findAll" resultType="com.example.demo.entity.User">
         SELECT * FROM user
     </select>
+    │    │         │
+    │    │         └── resultType：查询结果转成什么 Java 类型
+    │    └── id="findAll"：对应 Mapper 接口里的 findAll() 方法
+    └── <select>：查询操作
 
-    <!-- 根据 ID 查询 -->
-    <select id="findById" resultType="com.example.myapp.entity.User">
-        SELECT * FROM user WHERE id = #{id}
-    </select>
-
-    <!-- 插入 -->
-    <insert id="insert" parameterType="com.example.myapp.entity.User">
+    <!-- 一个 <insert> = 一条插入 SQL -->
+    <insert id="insert" parameterType="com.example.demo.entity.User">
         INSERT INTO user(name, age, email)
         VALUES(#{name}, #{age}, #{email})
     </insert>
 </mapper>
 ```
 
+**四种 XML 标签：**
+
+| 标签 | 作用 | 对应 SQL |
+|------|------|----------|
+| `<select>` | 查询 | SELECT |
+| `<insert>` | 插入 | INSERT |
+| `<update>` | 修改 | UPDATE |
+| `<delete>` | 删除 | DELETE |
+
+**`#{id}` 是什么意思？**
+
+```xml
+<select id="findById" resultType="...User">
+    SELECT * FROM user WHERE id = #{id}
+</select>
+```
+
+```
+#{id}  =  占位符，等价于 SQL 里的 ?
+
+SELECT * FROM user WHERE id = #{id}
+                              ↑
+                              等于 SELECT * FROM user WHERE id = ?
+
+MyBatis 会自动把方法参数 id 的值填进去，不用你操心
+```
+
+**⭐ namespace 怎么和 Mapper 接口连起来？**
+
+```
+XML 文件：                          Mapper 接口：
+<mapper                             package com.example.demo.mapper;
+  namespace=                        @Mapper
+  "com.example.demo.mapper.         public interface UserMapper {
+  UserMapper">                      │
+│                                   └── 全限定名 = com.example.demo.mapper.UserMapper
+└── 必须完全一样！MyBatis 自动按这个地址找到接口连起来
+```
+
+> **namespace 写错了会怎样？** MyBatis 找不到对应的接口，启动报错！所以 namespace 必须和 Mapper 接口的"包名 + 类名"一模一样。
+
+**XML 方式需要额外配置！** 在 `application.yml` 中加扫描路径：
+
+📁 **写在 `src/main/resources/application.yml`**
+
+```yaml
+mybatis:
+  mapper-locations: classpath:mapper/*.xml   # 告诉 MyBatis：XML 文件在 mapper 文件夹里
+```
+
 > **两种方式怎么选？**
 > - 简单的单表 CRUD → 注解方式，方便快捷
 > - 复杂的多表联查、动态 SQL → XML 方式，更灵活
-
-> **XML 方式的 namespace 必须和 Mapper 接口的全限定名一致！** 比如接口是 `com.example.myapp.mapper.UserMapper`，那 XML 的 `namespace` 也要写 `com.example.myapp.mapper.UserMapper`。
-
-> **XML 方式需要配置扫描路径！** 在 `application.yml` 中加：
-> ```yaml
-> mybatis:
->   mapper-locations: classpath:mapper/*.xml
-> ```
 
 ### 7.3 `#{}` 和 `${}` 的区别（重要）
 

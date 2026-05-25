@@ -82,10 +82,31 @@ Content-Type: application/json
   "age": 20
 }
 
+### 7.1 查询用户列表（成功 - 返回列表）
+GET http://localhost:8080/result/user/list
 
+### 7.2 查询单个用户（成功 - 返回单个）
+GET http://localhost:8080/result/user/1
 
+### 7.3 查询单个用户（失败 - 用户不存在）
+GET http://localhost:8080/result/user/999
 
+### 7.4 添加用户（成功 - 不带数据）
+POST http://localhost:8080/result/user
+Content-Type: application/json
 
+{
+  "name": "王五",
+  "age": 30,
+  "email": "wangwu@example.com"
+}
 
+### 7.5 校验 ID（成功 - ID 有效）
+GET http://localhost:8080/result/user/check/1
 
+### 7.6 校验 ID（失败 - ID 小于 0）
+GET http://localhost:8080/result/user/check/-1
+
+### 7.7 校验 ID（失败 - ID 大于 100）
+GET http://localhost:8080/result/user/check/200
 

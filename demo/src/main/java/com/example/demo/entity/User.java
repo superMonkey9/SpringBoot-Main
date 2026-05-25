@@ -1,16 +1,20 @@
 package com.example.demo.entity;
 
+import java.time.LocalDateTime;
+
 public class User {
     private Integer id;
     private String name;
     private Integer age;
     private String email;
+    private LocalDateTime createTime;
     public User(){}
-    public User(Integer id, String name, Integer age, String email) {
+    public User(Integer id, String name, Integer age, String email, LocalDateTime createTime) {
         this.id = id;
         this.name = name;
         this.age = age;
         this.email = email;
+        this.createTime = createTime;
     }
 
     public Integer getId() {
@@ -43,6 +47,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public LocalDateTime getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
     }
 }
 
