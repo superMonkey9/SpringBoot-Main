@@ -976,6 +976,42 @@ public class Result<T> {
 
 > **`success` 为什么能直接用 `Result.success(user)` 调用？** 因为它是 `static` 静态方法——不用 `new`，直接用类名就能调用。`success` 方法内部自己会 `new Result()` 并设置好数据，你只需要传值进去就行。👉 [详情看 Java 知识点：static 静态方法](Java知识点.md#24--static-静态方法不用-new-就能调用)
 
+### ⭐ `<T> Result<T>` 逐个拆解
+
+这段代码初学时最容易看晕，拆开来看就清楚了：
+
+```java
+//            声明T       返回类型用了T
+//            ↓              ↓
+public static <T> Result<T> success(T data)
+│             │      │       │       │
+│             │      │       │       └── 参数：你传进来的数据（User、List 等）
+│             │      │       └── 方法名
+│             │      └── 返回值类型：Result<T>（装了 T 类型数据的 Result）
+│             └── 声明："我要用一个类型占位符，叫它 T"
+└── static：不用 new，直接调用
+```
+
+**T 到底是什么？由你传的参数决定！**
+
+```java
+// 你传了一个 User → T 就是 User → 返回 Result<User>
+User user = new User(1, "张三", 20, "zhangsan@example.com");
+Result<User> r = Result.success(user);
+// 前端收到：{"code":200,"msg":"success","data":{"id":1,"name":"张三",...}}
+
+// 你传了一个 List<User> → T 就是 List<User> → 返回 Result<List<User>>
+List<User> list = userList;
+Result<List<User>> r = Result.success(list);
+// 前端收到：{"code":200,"msg":"success","data":[{"id":1,...},{"id":2,...}]}
+
+// 你没传数据 → T 就是 Void → 返回 Result<Void>
+Result r = Result.success();
+// 前端收到：{"code":200,"msg":"success","data":null}
+```
+
+**一句话：`<T>` 声明"我有一个万能类型叫 T"，`Result<T>` 表示"返回的 Result 里面装的东西就是 T"，T 具体是什么看你传了什么参数** 📦
+
 **固定套路总结：**
 
 | 部分 | 作用 | 说明 |

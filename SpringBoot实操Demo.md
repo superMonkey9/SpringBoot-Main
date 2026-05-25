@@ -809,6 +809,52 @@ public class ResultController {
 }
 ```
 
+## 验证：test.http 参考代码
+
+```http
+### 7.1 查询用户列表（成功 - 返回列表）
+GET http://localhost:8080/result/user/list
+
+### 7.2 查询单个用户（成功 - 返回单个）
+GET http://localhost:8080/result/user/1
+
+### 7.3 查询单个用户（失败 - 用户不存在）
+GET http://localhost:8080/result/user/999
+
+### 7.4 添加用户（成功 - 不带数据）
+POST http://localhost:8080/result/user
+Content-Type: application/json
+
+{
+  "name": "王五",
+  "age": 30,
+  "email": "wangwu@example.com"
+}
+
+### 7.5 校验 ID（成功 - ID 有效）
+GET http://localhost:8080/result/user/check/1
+
+### 7.6 校验 ID（失败 - ID 小于 0）
+GET http://localhost:8080/result/user/check/-1
+
+### 7.7 校验 ID（失败 - ID 大于 100）
+GET http://localhost:8080/result/user/check/200
+```
+
+**预期结果：**
+
+| 请求 | code | msg | data |
+|------|------|-----|------|
+| 7.1 GET /result/user/list | 200 | "success" | [张三, 李四] |
+| 7.2 GET /result/user/1 | 200 | "success" | {张三} |
+| 7.3 GET /result/user/999 | 500 | "用户不存在" | null |
+| 7.4 POST /result/user | 200 | "success" | null |
+| 7.5 GET /result/user/check/1 | 200 | "success" | "ID 有效" |
+| 7.6 GET /result/user/check/-1 | 500 | "ID 不能小于 0" | null |
+| 7.7 GET /result/user/check/200 | 500 | "ID 不能大于 100" | null |
+
+> **重点观察：** code = 200 时 data 有数据，code = 500 时 data 为 null。7.4 调用的是 `Result.success()` 不带参版本，所以 data 也是 null。
+
 ---
 
 # Demo 8：连接 MySQL 数据库
@@ -1451,19 +1497,25 @@ mybatis:
     map-underscore-to-camel-case: true
 ```
 
-## 12.8 测试接口
+## 12.8 验证：test.http 参考代码
 
 ```http
-### 1. 查询所有用户
+### 12.1 查询所有用户（成功）
 GET http://localhost:8080/user/list
 
-### 2. 根据 ID 查询
+### 12.2 根据 ID 查询（成功 - 用户存在）
 GET http://localhost:8080/user/1
 
-### 3. 搜索用户
+### 12.3 根据 ID 查询（失败 - 用户不存在）
+GET http://localhost:8080/user/999
+
+### 12.4 搜索用户（成功 - 模糊匹配）
 GET http://localhost:8080/user/search?name=张
 
-### 4. 添加用户
+### 12.5 搜索用户（成功 - 无结果）
+GET http://localhost:8080/user/search?name=不存在的名字
+
+### 12.6 添加用户（成功）
 POST http://localhost:8080/user
 Content-Type: application/json
 
@@ -1473,7 +1525,7 @@ Content-Type: application/json
     "email": "new@example.com"
 }
 
-### 5. 修改用户
+### 12.7 修改用户（成功）
 PUT http://localhost:8080/user
 Content-Type: application/json
 
@@ -1484,9 +1536,43 @@ Content-Type: application/json
     "email": "updated@example.com"
 }
 
-### 6. 删除用户
+### 12.8 修改用户（失败 - 用户不存在）
+PUT http://localhost:8080/user
+Content-Type: application/json
+
+{
+    "id": 999,
+    "name": "不存在",
+    "age": 20,
+    "email": "no@example.com"
+}
+
+### 12.9 删除用户（成功）
 DELETE http://localhost:8080/user/3
+
+### 12.10 删除用户（失败 - 用户不存在）
+DELETE http://localhost:8080/user/999
 ```
+
+**预期结果：**
+
+| 请求 | code | msg | data |
+|------|------|-----|------|
+| 12.1 GET /user/list | 200 | "success" | [用户列表] |
+| 12.2 GET /user/1 | 200 | "success" | {张三} |
+| 12.3 GET /user/999 | 500 | "用户不存在" | null |
+| 12.4 GET /user/search?name=张 | 200 | "success" | [姓张的用户] |
+| 12.5 GET /user/search?name=不存在的名字 | 200 | "success" | []（空列表） |
+| 12.6 POST /user（添加） | 200 | "success" | null |
+| 12.7 PUT /user（修改） | 200 | "success" | null |
+| 12.8 PUT /user（修改不存在的） | 500 | "用户不存在" | null |
+| 12.9 DELETE /user/3（删除） | 200 | "success" | null |
+| 12.10 DELETE /user/999（删除不存在的） | 500 | "用户不存在" | null |
+
+> **重点观察：**
+> - 成功操作（增删改）返回 `code=200, data=null`，因为调的是 `Result.success()` 不带参版本
+> - 查询成功返回 `code=200, data=数据`，因为调的是 `Result.success(数据)` 带参版本
+> - 操作失败（用户不存在等）返回 `code=500, msg=错误信息, data=null`
 
 ---
 

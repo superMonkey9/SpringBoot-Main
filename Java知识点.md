@@ -2,7 +2,7 @@
 
 > 本文件记录学习 Spring Boot 过程中遇到的 Java 基础知识点。
 > 遇到不懂的 Java 语法或概念，随时来这里查～
-> 最后更新：2026-05-17
+> 最后更新：2026-05-18
 
 ---
 
@@ -13,6 +13,7 @@
 - [3. 集合框架](#3-集合框架)
 - [4. 常用语法](#4-常用语法)
 - [5. 速查表](#5-速查表)
+- [6. Java 程序运行入门](#6-java-程序运行入门从零理解程序怎么跑起来)
 
 ---
 
@@ -461,6 +462,67 @@ Result<User> result = Result.success(user);
 User user = result.getData();  // 直接就是 User，不用转！
 ```
 
+### ⭐ `public class Result` vs `public class Result<T>` 的区别
+
+**没有 `<T>` 的 Result：**
+
+```java
+public class Result {
+    private Integer code;
+    private String msg;
+    private Object data;  // ⚠️ data 只能是 Object 类型
+}
+```
+
+**问题：** `data` 是 `Object`，取出来要手动强转，而且编译器不检查类型：
+
+```java
+Result r = new Result();
+r.setData("你好");
+
+// 要强转！很麻烦，还容易出错 💥
+String s = (String) r.getData();
+
+// 编译不报错，运行时才炸！
+Integer num = (Integer) r.getData();  // 💥 ClassCastException
+```
+
+**有 `<T>` 的 Result：**
+
+```java
+public class Result<T> {
+    private Integer code;
+    private String msg;
+    private T data;  // ⭐ T 是占位符，用的时候才决定装什么类型
+}
+```
+
+**好处：** 编译器帮你检查类型，不用强转：
+
+```java
+Result<String> r = new Result<>();
+r.setData("你好");
+
+// 直接取，不用强转 ✅
+String s = r.getData();
+
+// 编译直接报错，运行前就拦住了 ✅
+r.setData(123);  // ❌ 编译错误：类型不匹配
+```
+
+**对比表：**
+
+| | 没有 `<T>` | 有 `<T>` |
+|---|---|---|
+| data 的类型 | Object（万能盒） | T（指定类型盒） |
+| 取出来要强转吗 | 要！`(String) getData()` | 不要！直接 `getData()` |
+| 编译时能查错吗 | ❌ 不能 | ✅ 能 |
+| 类型安全吗 | ❌ 不安全 | ✅ 安全 |
+
+**生活类比 📦：**
+- 没有 `<T>` = 快递盒上只写"里面是东西"，打开才知道是什么，可能拿错 😵
+- 有 `<T>` = 快递盒上写"里面是 String"，一看就知道拿的是啥，绝对不拿错 😎
+
 ---
 
 # 4. 常用语法
@@ -555,4 +617,290 @@ try {
 
 ---
 
-> **学习建议：** 不用一次全看完，遇到不懂的来这里查就行。用多了自然就记住了～
+---
+
+# 6. Java 程序运行入门（从零理解程序怎么跑起来）
+
+---
+
+学 Spring Boot 时你经常看到 `main`、`static` 这些东西，但不知道它们到底是什么、什么时候该写、什么时候不用写。这一章帮你彻底搞清楚！
+
+## 6.1 main 方法 —— 程序的入口
+
+### main 是什么？
+
+**main 方法 = 程序的"启动按钮"。** Java 程序必须有一个 main 方法，JVM（Java 虚拟机）从这里开始执行代码。
+
+```java
+public static void main(String[] args) {
+    // 程序从这里开始执行
+    System.out.println("程序启动了！");
+}
+```
+
+### 逐词拆解
+
+```java
+public static void main(String[] args)
+│       │      │    │    │
+│       │      │    │    └── 参数：String[] args（命令行参数，一般不用管）
+│       │      │    └── 方法名：main（固定名字，不能改！）
+│       │      └── 返回类型：void（不需要返回值）
+│       └── static：不用 new，JVM 直接调用
+└── public：公开的，JVM 能访问到
+```
+
+**为什么是 `static`？** 因为程序刚启动时还没有任何对象，JVM 需要直接通过类名调用 main 方法，不需要先 new 对象。
+
+### 什么时候要写 main？
+
+| 场景 | 要不要写 main |
+|------|-------------|
+| 自己写一个 Java 小程序测试 | ✅ 要写 |
+| 写一个工具类想直接运行测试 | ✅ 要写 |
+| 写 Spring Boot 项目 | ⚠️ 启动类里有一个 main，其他类不用写 |
+| 写 Controller / Service / Mapper | ❌ 不用写（Spring 帮你管理） |
+
+### 在 Spring Boot 里
+
+你项目里的 `DemoApplication.java` 就是唯一的 main 方法：
+
+```java
+// ⭐ 这是整个 Spring Boot 项目唯一需要 main 的地方
+@SpringBootApplication
+public class DemoApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(DemoApplication.class, args);
+        // 启动 Spring Boot → 启动 Tomcat → 准备好接收请求
+    }
+}
+```
+
+**你写的 Controller、Service、Mapper 里都不需要写 main！** 因为 Spring Boot 启动后，会自动扫描这些类并管理它们。
+
+## 6.2 ⭐ static 详解 —— 到底属于什么？
+
+### static 是什么？
+
+**static = "属于类的，不属于某个对象的"。**
+
+```java
+public class Math {
+    // ⭐ static 方法：属于 Math 这个类
+    public static double random() { ... }
+
+    // ⭐ static 变量：属于 Math 这个类
+    public static final double PI = 3.14159;
+}
+```
+
+### 有 static vs 没 static
+
+```java
+public class User {
+    // 普通属性（没 static）：每个对象各有一份
+    private String name;
+    private Integer age;
+
+    // static 变量：所有对象共享一份
+    public static int totalCount = 0;
+
+    // 普通方法（没 static）：必须通过对象调用
+    public String getName() {
+        return this.name;
+    }
+
+    // static 方法：通过类名直接调用
+    public static User create(String name) {
+        User u = new User();
+        u.name = name;
+        totalCount++;  // 每创建一个用户，总数 +1
+        return u;
+    }
+}
+```
+
+**使用对比：**
+
+```java
+// 普通方法：必须先 new
+User user = new User("张三", 20);
+String name = user.getName();     // 通过对象调用
+
+// static 方法：直接用类名调用
+User user = User.create("张三");  // 不用 new，直接调用
+int total = User.totalCount;      // 直接用类名访问
+```
+
+### 你已经见过的 static
+
+| 写法 | 哪里的 | 为什么是 static |
+|------|---------|---------------|
+| `public static void main(...)` | 启动类 | JVM 需要直接调用 |
+| `Result.success(user)` | Result 类 | 不用 new，直接调用方便 |
+| `Math.random()` | Java 自带 | 工具方法，跟具体对象无关 |
+| `System.out.println()` | Java 自带 | out 是 static 变量，println 是普通方法 |
+
+### 生活类比 🏠
+
+```
+普通属性/方法 = 你家里的电视机
+  - 每个家庭（对象）各有一台
+  - 你家的电视你用，别人家用不了
+  - 必须先有家（new 对象），才能用电视（调方法）
+
+static 属性/方法 = 小区的公告栏
+  - 所有住户共享一个
+  - 不用先有家，直接去看公告栏（用类名调用）
+  - 谁都能看，写的内容所有人看到的都一样
+```
+
+### 什么时候用 static？
+
+| 场景 | 用不用 static | 例子 |
+|------|-------------|------|
+| 方法不需要用到对象的属性 | ✅ 用 static | `Result.success()`、`Math.random()` |
+| 工具类的方法 | ✅ 用 static | `Arrays.sort()`、`Collections.sort()` |
+| 所有对象共享一个值 | ✅ 用 static 变量 | `User.totalCount` |
+| 方法要用到 this（当前对象的属性） | ❌ 不能用 static | `user.getName()`、`user.setName()` |
+| Controller / Service 的方法 | ❌ 不能用 static | Spring 要管理这些对象 |
+
+## 6.3 调用关系 —— 谁调谁？
+
+### Spring Boot 里的完整调用链
+
+```
+浏览器输入 localhost:8080/user/1
+        │
+        ▼
+┌─────────────────────────────────┐
+│  DemoApplication.main()         │ ← 启动项目（唯一一个 main）
+│  Spring Boot 启动，扫描所有类     │
+└─────────────────────────────────┘
+        │
+        ▼
+┌─────────────────────────────────┐
+│  UserController.findById(1)     │ ← 接收请求，拿到参数 id=1
+│  {                              │
+│      User user = userService    │
+│          .findById(1);          │ ← 调用 Service
+│      return Result.success(user)│
+│  }                              │
+└─────────────────────────────────┘
+        │
+        ▼
+┌─────────────────────────────────┐
+│  UserServiceImpl.findById(1)    │ ← 写业务逻辑
+│  {                              │
+│      return userMapper          │
+│          .findById(1);          │ ← 调用 Mapper
+│  }                              │
+└─────────────────────────────────┘
+        │
+        ▼
+┌─────────────────────────────────┐
+│  UserMapper.findById(1)         │ ← 执行 SQL
+│  @Select("SELECT * FROM user    │
+│      WHERE id = #{id}")         │
+└─────────────────────────────────┘
+        │
+        ▼
+    数据库返回结果
+        │
+        ▼
+    逐层返回给浏览器
+```
+
+### 简化版（你现在阶段记住这个就行）
+
+```
+main 启动项目 → Spring 自动管理一切
+
+浏览器请求 → Controller（接请求）
+                   ↓ 调用
+              Service（写逻辑）
+                   ↓ 调用
+              Mapper（查数据库）
+                   ↓
+              数据库
+```
+
+**你写代码时只需要关心：**
+- Controller 方法：接收参数，调 Service，返回结果
+- Service 方法：写业务逻辑，调 Mapper
+- Mapper 方法：写 SQL
+
+**不需要写 main！** 因为 Spring Boot 的 `DemoApplication.main()` 已经帮你启动了一切。
+
+## 6.4 什么时候用什么集合？（强化版）
+
+**你在写 Spring Boot 代码时，90% 的场景用这两个就够了：**
+
+### 场景一：存一堆数据 → 用 `List`
+
+```java
+// 返回用户列表、订单列表、商品列表……
+@GetMapping("/user/list")
+public List<User> list() {
+    return userList;  // List<User>
+}
+```
+
+```java
+// 声明
+List<User> userList = new ArrayList<>();
+
+// 常用操作
+userList.add(user);              // 添加
+userList.get(0);                 // 获取第 0 个
+userList.set(0, user);           // 替换第 0 个
+userList.remove(0);              // 删除第 0 个
+userList.removeIf(u -> ...);     // 按条件删除
+userList.size();                 // 大小
+for (User u : userList) { ... }  // 遍历
+```
+
+### 场景二：通过名字找值 → 用 `Map`
+
+```java
+// 临时组装返回数据（正式项目用 Result 替代）
+Map<String, Object> result = new HashMap<>();
+result.put("code", 200);
+result.put("msg", "成功");
+result.get("code");  // 200
+```
+
+### 场景三：去重 → 用 `Set`（偶尔用）
+
+```java
+// 已处理的 ID、不重复的标签
+Set<Integer> processedIds = new HashSet<>();
+processedIds.add(1);
+processedIds.add(1);  // 加不进去，重复了
+processedIds.contains(1);  // true
+```
+
+### 快速选择表
+
+```
+你的数据长什么样？          用哪个？
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+排成一排，按顺序取       →  List / ArrayList
+名字→值，按键查找        →  Map / HashMap
+不重复                   →  Set / HashSet
+键值对，保持插入顺序     →  LinkedHashMap
+键值对，按 key 排序      →  TreeMap
+```
+
+### Spring Boot 里的典型用法
+
+| 场景 | 用什么 | 示例 |
+|------|--------|------|
+| Controller 返回列表 | `List<User>` | 用户列表、商品列表 |
+| Mapper 查询多条数据 | `List<User>` | `SELECT * FROM user` |
+| Result 封装返回 | `Result<T>` | 实际上是包装了 List/单个对象 |
+| 临时组装数据 | `Map<String, Object>` | 学习阶段用，正式项目用 Result |
+
+---
+
+> **学习建议：** 这一章不用一次全记住，遇到不懂的概念来查就行。main、static、调用关系这些在写 Spring Boot 时会反复用到，用多了自然就懂了～
