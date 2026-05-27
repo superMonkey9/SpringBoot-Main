@@ -1653,6 +1653,50 @@ mybatis:
 User findById(Integer id);
 ```
 
+**逐行拆解：**
+
+```
+@Select("SELECT * FROM user WHERE id = #{id}")   ← 第1层：告诉 MyBatis 执行什么 SQL
+@Results({                                        ← 第2层：告诉 MyBatis 结果怎么映射
+    @Result(property = "userName", column = "user_name"),
+    @Result(property = "createTime", column = "create_time")
+})
+User findById(Integer id);                        ← 第3层：方法声明（参数 + 返回值）
+```
+
+**`@Result` 每条规则怎么理解：**
+
+```java
+@Result(property = "userName", column = "user_name")
+              │                    │
+              │                    └── column：数据库里的列名（user_name）
+              └── property：Java 里的属性名（userName）
+
+翻译：数据库的 user_name 列 → 映射到 Java 的 userName 属性
+```
+
+```java
+@Result(property = "createTime", column = "create_time")
+              │                      │
+              │                      └── 数据库列名：create_time
+              └── Java 属性名：createTime
+
+翻译：数据库的 create_time 列 → 映射到 Java 的 createTime 属性
+```
+
+**为什么要 `@Results`？因为数据库和 Java 命名风格不一样：**
+
+```
+数据库用下划线            Java 用驼峰
+user_name         ≠     userName
+create_time       ≠     createTime
+
+没有映射 → MyBatis 不知道 user_name 对应 userName → 查出来是 null 💥
+有映射   → MyBatis 按规则映射 → 正常返回 ✅
+```
+
+> **什么时候需要写 `@Results`？** 开了驼峰映射（方法二）之后，大多数情况自动搞定。只有个别字段名特别奇怪、驼峰映射搞不定的时候才需要手动写 `@Results`。
+
 ### 7.5 MyBatis 动态 SQL（进阶但实用）
 
 **`<if>` 标签：** 条件判断
