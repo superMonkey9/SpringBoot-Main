@@ -1699,10 +1699,38 @@ create_time       ≠     createTime
 
 ### 7.5 MyBatis 动态 SQL（进阶但实用）
 
-**`<if>` 标签：** 条件判断
+**什么是动态 SQL？** SQL 语句会根据你传的参数"自动变化"。
+
+```
+传统 SQL（固定的）：不管传什么参数，SQL 永远一样
+  SELECT * FROM user WHERE name = #{name}
+  → 你必须传 name，不传就报错
+
+动态 SQL（会变的）：传了什么参数，SQL 就长什么样
+  SELECT * FROM user WHERE 1=1
+    <if test="name != null"> AND name = #{name} </if>
+    <if test="age != null"> AND age = #{age} </if>
+  → 传 name 就查 name，传 age 就查 age，传啥查啥
+```
+
+**什么时候用？** 当你不确定用户会传哪些参数的时候！比如搜索功能：
+
+```
+用户只填了名字：    SQL 应该是 WHERE name LIKE '%张%'
+用户只填了年龄：    SQL 应该是 WHERE age = 20
+用户名字+年龄都填：  SQL 应该是 WHERE name LIKE '%张%' AND age = 20
+用户啥都没填：      SQL 应该是 查全部（没有 WHERE）
+
+没有动态 SQL → 你要写 4 个方法！
+有动态 SQL   → 一个方法搞定！
+```
+
+📁 **动态 SQL 写在 XML 文件里**（注解方式写动态 SQL 很丑）
+
+#### ⭐ `<if>` 标签 — 条件成立才拼 SQL
 
 ```xml
-<select id="findByName" resultType="User">
+<select id="findByCondition" resultType="User">
     SELECT * FROM user WHERE 1=1
     <if test="name != null and name != ''">
         AND name LIKE CONCAT('%', #{name}, '%')
@@ -1713,12 +1741,30 @@ create_time       ≠     createTime
 </select>
 ```
 
-> **`WHERE 1=1` 的作用：** 这是一个技巧，因为后面的 `<if>` 条件可能不成立，`1=1` 保证 SQL 语法正确。后面可以统一用 `AND` 连接条件。
-
-**`<where>` 标签（更优雅的写法）：**
+**拆解：**
 
 ```xml
-<select id="findByName" resultType="User">
+<if test="name != null and name != ''">
+<!--  │                                -->
+<!--  └── test：条件（name 不是 null 且不是空字符串）-->
+    AND name LIKE CONCAT('%', #{name}, '%')
+    <!-- ↑ 条件成立时，这段 SQL 才会被拼进去 -->
+</if>
+```
+
+**效果：**
+
+```
+传了 name="张"  →  SQL：SELECT * FROM user WHERE 1=1 AND name LIKE '%张%'
+没传 name       →  SQL：SELECT * FROM user WHERE 1=1
+```
+
+> **`WHERE 1=1` 的作用：** 这是一个技巧，`1=1` 永远成立，保证后面的 `<if>` 条件不管成不成立，SQL 语法都正确。后面可以统一用 `AND` 连接条件。
+
+#### ⭐ `<where>` 标签 — 自动处理 WHERE 和 AND（比 1=1 更优雅）
+
+```xml
+<select id="findByCondition" resultType="User">
     SELECT * FROM user
     <where>
         <if test="name != null and name != ''">
@@ -1731,7 +1777,95 @@ create_time       ≠     createTime
 </select>
 ```
 
-> **`<where>` 的好处：** 它会自动去掉多余的 `AND` / `OR`，不用写 `WHERE 1=1`。
+**`<where>` 帮你做两件事：**
+1. 有 `<if>` 成立 → 自动加 `WHERE`，自动去掉第一个多余的 `AND`
+2. 所有 `<if>` 都不成立 → 不加 `WHERE`
+
+```
+传 name="张"，age=20：
+  → SELECT * FROM user WHERE name LIKE '%张%' AND age = 20
+                                      ↑ 自动去掉了前面的 AND
+
+只传 name="张"：
+  → SELECT * FROM user WHERE name LIKE '%张%'
+
+啥都不传：
+  → SELECT * FROM user（没有 WHERE，查全部）
+```
+
+#### ⭐ `<set>` 标签 — 动态更新（只更新传了值的字段）
+
+📁 **写在 XML 的 `<update>` 标签里**
+
+```xml
+<update id="dynamicUpdate" parameterType="User">
+    UPDATE user
+    <set>
+        <if test="name != null">name = #{name},</if>
+        <if test="age != null">age = #{age},</if>
+        <if test="email != null">email = #{email},</if>
+    </set>
+    WHERE id = #{id}
+</update>
+```
+
+**`<set>` 的作用：** 自动加 `SET`，自动去掉最后一个多余的逗号
+
+```
+只更新 name：
+  → UPDATE user SET name = '张三' WHERE id = 1
+                          ↑ 自动去掉了后面的逗号
+
+更新 name 和 age：
+  → UPDATE user SET name = '张三', age = 20 WHERE id = 1
+```
+
+#### ⭐ `<foreach>` 标签 — 批量操作（批量删除、批量插入）
+
+📁 **写在 XML 的 `<delete>` 或 `<insert>` 标签里**
+
+```xml
+<!-- 批量删除 -->
+<delete id="batchDelete">
+    DELETE FROM user WHERE id IN
+    <foreach collection="ids" item="id" open="(" separator="," close=")">
+        #{id}
+    </foreach>
+</delete>
+```
+
+**拆解 `<foreach>` 的属性：**
+
+```xml
+<foreach
+    collection="ids"       ← 要遍历的集合（方法参数名）
+    item="id"              ← 每个元素叫什么名字
+    open="("               ← 开始符号
+    separator=","          ← 元素之间的分隔符
+    close=")">             ← 结束符号
+    #{id}                  ← 每个元素怎么用
+</foreach>
+```
+
+**效果：**
+
+```
+传入 ids = [1, 3, 5]
+  → DELETE FROM user WHERE id IN (1, 3, 5)
+                              ↑       ↑
+                              open    close
+                                  ↑
+                              separator
+```
+
+#### 动态 SQL 标签速查表
+
+| 标签 | 作用 | 什么时候用 |
+|------|------|-----------|
+| `<if>` | 条件成立才拼 SQL | 查询时可选参数 |
+| `<where>` | 自动加 WHERE，去掉多余 AND | 多个可选条件的查询 |
+| `<set>` | 自动加 SET，去掉多余逗号 | 只更新部分字段 |
+| `<foreach>` | 遍历集合，批量操作 | 批量删除、批量插入 |
 
 ---
 
