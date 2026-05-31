@@ -1,0 +1,14 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/mydb?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=utf-8
+    username: root
+    password: 123456   # 改成你自己的密码
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true  # 开启驼峰命名映射
+  mapper-locations: classpath:mapper/*.xml  # XML 方式的 SQL 文件位置（如果用注解方式可以不配）

@@ -1,0 +1,112 @@
+### GET 请求 - 查询用户列表
+GET http://localhost:8080/user/list
+
+### POST 请求 - 添加用户
+POST http://localhost:8080/user
+Content-Type: application/json
+
+{
+  "name": "赵六",
+  "age": 28,
+  "email": "zhaoliu@example.com"
+}
+
+
+### PUT 请求-修改用户
+PUT http://localhost:8080/user
+Content-Type: application/json
+
+{
+  "id": 1,
+  "name": "张三改名",
+  "age": 21,
+  "email": "zhangsan@example.com"
+}
+
+
+### DELETE 请求 - 删除用户
+DELETE http://localhost:8080/user/3
+
+### 验证：查询用户列表
+GET http://localhost:8080/user/list
+
+//UserController查询
+###测试@RequestParam（基本用法）
+GET http://localhost:8080/param/test1?name=张三&age=20
+
+
+###测试@RequestParam（默认值)
+GET http://localhost:8080/param/test2?name=张三
+### 只传 name 不传 age，age 会用默认值 18
+
+### 测试 @RequestParam（可选参数）
+GET http://localhost:8080/param/test3?name=张三
+### 不传 age，返回"未知"
+
+
+### 测试 @RequestParam（模拟搜索分页）
+GET http://localhost:8080/param/test4?keyword=Spring&page=2&size=20
+
+
+### 测试 @PathVariable（单个）
+GET http://localhost:8080/param/user/5
+
+### 测试 @PathVariable（多个）
+GET http://localhost:8080/param/user/5/order/100
+
+### 测试 @RequestBody（用 Map 接收）
+POST http://localhost:8080/param/user
+Content-Type: application/json
+
+{
+  "name": "赵六",
+  "age": 28
+}
+
+### 测试 @RequestBody（用对象接收）
+POST http://localhost:8080/param/user2
+Content-Type: application/json
+
+{
+  "name": "赵六",
+  "age": 28,
+  "email": "zhaoliu@example.com"
+}
+
+### 测试混合参数（路径参数 + 请求体）
+POST http://localhost:8080/param/mix/5
+Content-Type: application/json
+
+{
+  "name": "张三",
+  "age": 20
+}
+
+### 7.1 查询用户列表（成功 - 返回列表）
+GET http://localhost:8080/result/user/list
+
+### 7.2 查询单个用户（成功 - 返回单个）
+GET http://localhost:8080/result/user/1
+
+### 7.3 查询单个用户（失败 - 用户不存在）
+GET http://localhost:8080/result/user/999
+
+### 7.4 添加用户（成功 - 不带数据）
+POST http://localhost:8080/result/user
+Content-Type: application/json
+
+{
+  "name": "王五",
+  "age": 30,
+  "email": "wangwu@example.com"
+}
+
+### 7.5 校验 ID（成功 - ID 有效）
+GET http://localhost:8080/result/user/check/1
+
+### 7.6 校验 ID（失败 - ID 小于 0）
+GET http://localhost:8080/result/user/check/-1
+
+### 7.7 校验 ID（失败 - ID 大于 100）
+GET http://localhost:8080/result/user/check/200
+
