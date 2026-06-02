@@ -30,7 +30,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void save(User user) {
-        User existing = (User) userMapper.findByName(user.getName());
+        // 这里可以加业务逻辑，比如检查用户名是否重复
+        List<User> existing = userMapper.findByName(user.getName());
         if (!existing.isEmpty()) {
             // 实际项目中应该抛出自定义异常
             throw new RuntimeException("用户名已存在");

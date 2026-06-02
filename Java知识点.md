@@ -285,15 +285,16 @@ for (String name : list) {
 
 **List 常用方法速查：**
 
-| 方法 | 作用 | 示例 |
-|------|------|------|
-| `add(e)` | 添加元素 | `list.add("张三")` |
-| `get(i)` | 获取第 i 个元素 | `list.get(0)` |
-| `set(i, e)` | 替换第 i 个元素 | `list.set(0, "李四")` |
-| `remove(i)` | 删除第 i 个元素 | `list.remove(0)` |
-| `removeIf(条件)` | 按条件删除 | `list.removeIf(u -> u.equals("张三"))` |
-| `size()` | 获取大小 | `list.size()` |
-| `contains(e)` | 是否包含 | `list.contains("张三")` |
+| 方法 | 作用 | 示例 | 返回值 |
+|------|------|------|--------|
+| `add(e)` | 添加元素 | `list.add("张三")` | void |
+| `get(i)` | 获取第 i 个元素 | `list.get(0)` | 元素本身 |
+| `set(i, e)` | 替换第 i 个元素 | `list.set(0, "李四")` | 被替换的旧元素 |
+| `remove(i)` | 删除第 i 个元素 | `list.remove(0)` | 被删除的元素 |
+| `removeIf(条件)` | 按条件删除 | `list.removeIf(u -> u.equals("张三"))` | boolean |
+| `size()` | 获取大小 | `list.size()` | int（元素个数） |
+| `isEmpty()` | 列表是否为空 | `list.isEmpty()` | boolean（空=true） |
+| `contains(e)` | 是否包含某个元素 | `list.contains("张三")` | boolean |
 
 ---
 
