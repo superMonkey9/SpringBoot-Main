@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户管理系统</title>
+</head>
+<body>
+<h1>用户管理</h1>
+
+<!-- 查询列表（用链接就行） -->
+<h2>查看所有用户</h2>
+<a href="/user/list">点击查看用户列表</a>
+
+<!-- 添加用户（用表单） -->
+<h2>添加用户</h2>
+<form action="/user" method="post">
+    <p>姓名：<input type="text" name="name"></p>
+    <p>年龄：<input type="text" name="age"></p>
+    <p>邮箱：<input type="text" name="email"></p>
+    <p><button type="submit">添加</button></p>
+</form>
+</body>
+</html>

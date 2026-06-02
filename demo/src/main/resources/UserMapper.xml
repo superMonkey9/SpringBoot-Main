@@ -80,7 +80,6 @@
             (#{user.name}, #{user.age}, #{user.email})
         </foreach>
     </insert>
-    <foreach>
 
 <!--    参数解释：-->
 <!--    collection — 要遍历的集合-->
@@ -89,4 +88,4 @@
 <!--    separator — 分隔符-->
 <!--    close — 结束符号-->
 
-</mapper>>
+</mapper>

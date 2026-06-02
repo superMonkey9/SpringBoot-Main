@@ -25,4 +25,16 @@ public interface UserMapper {
 
     @Delete("DELETE FROM user WHERE id=#{id}")
     void delete(Integer id);
+
+    // 条件查询（多个可选条件）
+    @Select("<script>" +
+            "SELECT * FROM user WHERE 1=1" +
+            "<if test='name != null and name != \"\"'>" +
+            "  AND name LIKE CONCAT('%', #{name}, '%')" +
+            "</if>" +
+            "<if test='age != null'>" +
+            "  AND age = #{age}" +
+            "</if>" +
+            "</script>")
+    List<User> findByCondition(@Param("name") String name, @Param("age") Integer age);
 }
