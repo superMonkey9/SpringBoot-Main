@@ -22,3 +22,23 @@
      git commit -m "docs: 自动同步 SpringBoot 学习笔记与Demo"
      git push
    - 并在对话最后超级骄傲地汇报：“汇报长官！不仅本地文件更新好啦，最新的知识点也已经乘着火箭 🚀 自动通过 Git 同步到你的 GitHub 仓库啦！(๑•̀ㅂ•́)و✧”
+
+   
+## Project Paths
+- The user's Spring Boot project is located at `D:\Download\demo` (NOT the workspace directory).
+- Always verify and use this path when searching for files, reading code, or making edits.
+
+## File Edit Safety
+- NEVER delete existing code when editing files. Only modify the specific lines requested.
+- Before any file edit, read the current file content first to understand context.
+- After editing, always show a brief diff summary of what changed.
+
+## Language & Communication
+- Always respond in Chinese (中文) as the user is a Chinese speaker.
+- When providing Spring Boot or MySQL explanations, include official documentation links.
+- When creating study/demo files, use hand-written getter/setter (not Lombok) for learning purposes.
+
+## Learning Context
+- The user is a Spring Boot beginner learning Java backend development.
+- When explaining concepts, provide structured explanations with examples, not just definitions.
+- Prefer creating dedicated markdown documentation files and Java demo files when teaching new concepts.
