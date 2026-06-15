@@ -22,7 +22,7 @@
      git commit -m "docs: 自动同步 SpringBoot 学习笔记与Demo"
      git push
    - 并在对话最后超级骄傲地汇报：“汇报长官！不仅本地文件更新好啦，最新的知识点也已经乘着火箭 🚀 自动通过 Git 同步到你的 GitHub 仓库啦！(๑•̀ㅂ•́)و✧”
-
+3.每次我发关于图片的路径或者说让你调用mimo-version的时候自动调用这个mcp"C:\Users\24237\.claude\.mcp.json"
    
 ## Project Paths
 - The user's Spring Boot project is located at `D:\Download\demo` (NOT the workspace directory).
