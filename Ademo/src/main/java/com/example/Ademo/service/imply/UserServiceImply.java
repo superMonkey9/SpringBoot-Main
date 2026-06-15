@@ -1,37 +1,39 @@
-package com.example.pdemo.service.impl;
+package com.example.Ademo.service.imply;
 
-import com.example.pdemo.entity.User;
-import com.example.pdemo.mapper.UserMapper;
-import com.example.pdemo.service.UserService;
+
+import com.example.Ademo.entity.User;
+import com.example.Ademo.mapper.UserMapper;
+import com.example.Ademo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImply implements UserService {
 
     @Autowired
     private UserMapper userMapper;
 
     @Override
-    public List<User> findAll() {
-        return userMapper.findAll();
+    public User findByUsername(String username) {
+        return null;
     }
 
     @Override
-    public User findById(Integer id) {
-        return userMapper.findById(id);
+    public List<User> findById(Integer id) {
+        return List.of();
     }
 
     @Override
-    public List<User> findByName(String name) {
-        return userMapper.findByName(name);
+    public List<User> findByCondition(String username, Integer price) {
+        return List.of();
     }
+
     @Override
     public void save(User user) {
         // 这里可以加业务逻辑，比如检查用户名是否重复
-        List<User> existing = userMapper.findByName(user.getName());
+        List<User> existing = userMapper.findByUsername(user.getUsername());
         if (!existing.isEmpty()) {
             // 实际项目中应该抛出自定义异常
             throw new RuntimeException("用户名已存在");

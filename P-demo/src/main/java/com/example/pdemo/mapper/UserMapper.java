@@ -14,7 +14,7 @@ public interface UserMapper {
     @Select("SELECT * FROM user WHERE id=#{id}")
     User findById(Integer id);
 
-    @Select("SELECT * FROM user WHERE name LIKE COUNT('%', #{name}, '%')")
+    @Select("SELECT * FROM user WHERE name LIKE CONCAT('%', #{name}, '%')")
     List<User> findByName(String name);
 
     @Insert("INSERT INTO user(name,age,email) VALUES (#{name}, #{age}, #{email}) ")
