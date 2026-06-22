@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>选择生成器</title>
+    <style>
+        /*元素选择器*/
+        p {
+            color: #666;
+        }
+
+        /*class选择器*/
+        .highlight {
+            color: red;
+            font-weight: bold;
+        }
+
+        /*id选择器*/
+        #main-title {
+            color: #333;
+            font-size：24px;
+        }
+
+        /* 后代选择器 */
+        .card p {
+            color: blue;
+        }
+
+    </style>
+</head>
+<body>
+<h1 id="main-title">选择器练习</h1>
+
+<p>普通段落（元素选择器，灰色）</p>
+<p class="highlight">高亮段落（class 选择器，红色加粗）</p>
+
+<div class="card">
+    <p>卡片里的段落（后代选择器，蓝色）</p>
+</div>
+</body>
+</html>

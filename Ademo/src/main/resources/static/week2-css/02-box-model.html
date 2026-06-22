@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>盒模型练习</title>
+    <style>
+        * {
+            box-sizing: border-box;  /* ⭐ 推荐！让 width 包含 padding 和 border */
+        }
+
+        .box {
+            width: 200px;
+            height: 100px;
+            padding: 20px;           /* 内边距 */
+            border: 2px solid #333;  /* 边框 */
+            margin: 20px;            /* 外边距 */
+            background-color: #f0f0f0;
+        }
+
+        .box-1 {
+            margin-bottom: 40px;     /* 下方外边距更大 */
+        }
+
+        .box-2 {
+            padding: 100px 30px;      /* 上下10px，左右30px */
+        }
+        .box-3 {
+            padding: 20px 30px;
+        }
+    </style>
+</head>
+<body>
+<h1>盒模型练习</h1>
+
+<div class="box box-1">
+    Box 1：margin-bottom: 40px
+</div>
+<div class="box box-2">
+    Box 2：padding: 10px 30px
+</div>
+<div class="box box-3">
+    Box 3
+</div>
+</body>
+</html>

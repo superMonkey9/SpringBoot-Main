@@ -376,7 +376,7 @@
 # Demo 6：CSS 选择器练习
 
 > ⬆ [上一章：Demo 5](#demo-5用户表格) | ⬇ [下一章：Demo 7](#demo-7盒模型练习) | [返回目录](#目录)
-> 📖 [点击跳转到对应知识点：选择器](前端知识点.md#7-选择器)
+> 📖 [点击跳转到对应知识点：选择器](前端知识点.md#8-选择器)
 
 📁 **文件位置：`my-project/src/main/resources/static/week2-css/01-selector.html`**
 
@@ -440,7 +440,7 @@
 # Demo 7：盒模型练习
 
 > ⬆ [上一章：Demo 6](#demo-6css-选择器练习) | ⬇ [下一章：Demo 8](#demo-flex-布局实战) | [返回目录](#目录)
-> 📖 [点击跳转到对应知识点：盒模型](前端知识点.md#8-盒模型核心)
+> 📖 [点击跳转到对应知识点：盒模型](前端知识点.md#9-盒模型核心)
 
 📁 **文件位置：`my-project/src/main/resources/static/week2-css/02-box-model.html`**
 
@@ -502,7 +502,7 @@
 # Demo 8：Flex 布局实战
 
 > ⬆ [上一章：Demo 7](#demo-7盒模型练习) | ⬇ [下一章：Demo 9](#demo-9定位练习) | [返回目录](#目录)
-> 📖 [点击跳转到对应知识点：Flex 布局](前端知识点.md#9-flex-布局核心)
+> 📖 [点击跳转到对应知识点：Flex 布局](前端知识点.md#10-flex-布局核心)
 > 📖 阮一峰教程：[Flex 布局教程](https://ruanyifeng.com/blog/2015/07/flex-grammar.html)
 
 📁 **文件位置：`my-project/src/main/resources/static/week2-css/03-flex.html`**
@@ -606,7 +606,7 @@
 # Demo 9：定位练习
 
 > ⬆ [上一章：Demo 8](#demo-flex-布局实战) | ⬇ [下一章：Demo 10](#demo-10js-基础语法练习) | [返回目录](#目录)
-> 📖 [点击跳转到对应知识点：定位](前端知识点.md#10-定位)
+> 📖 [点击跳转到对应知识点：定位](前端知识点.md#13-定位)
 
 📁 **文件位置：`my-project/src/main/resources/static/week2-css/04-position.html`**
 
@@ -691,7 +691,7 @@
 # Demo 10：JS 基础语法练习
 
 > ⬆ [上一章：Demo 9](#demo-9定位练习) | ⬇ [下一章：Demo 11](#demo-11数组和对象练习) | [返回目录](#目录)
-> 📖 [点击跳转到对应知识点：基础语法](前端知识点.md#11-基础语法)
+> 📖 [点击跳转到对应知识点：基础语法](前端知识点.md#14-基础语法)
 
 📁 **文件位置：`my-project/src/main/resources/static/week3-js/01-basic.html`**
 
@@ -771,7 +771,7 @@
 # Demo 11：数组和对象练习
 
 > ⬆ [上一章：Demo 10](#demo-10js-基础语法练习) | ⬇ [下一章：Demo 12](#demo-12es6-语法练习) | [返回目录](#目录)
-> 📖 [点击跳转到对应知识点：数组和对象](前端知识点.md#12-数组和对象)
+> 📖 [点击跳转到对应知识点：数组和对象](前端知识点.md#15-数组和对象)
 
 📁 **文件位置：`my-project/src/main/resources/static/week3-js/02-array-object.html`**
 
@@ -861,7 +861,7 @@
 # Demo 12：ES6 语法练习
 
 > ⬆ [上一章：Demo 11](#demo-11数组和对象练习) | ⬇ [下一章：Demo 13](#demo-13dom-操作实战) | [返回目录](#目录)
-> 📖 [点击跳转到对应知识点：ES6 重点语法](前端知识点.md#13-es6-重点语法)
+> 📖 [点击跳转到对应知识点：ES6 重点语法](前端知识点.md#16-es6-重点语法)
 > 📖 阮一峰：[ES6 入门教程](https://es6.ruanyifeng.com/)
 
 📁 **文件位置：`my-project/src/main/resources/static/week3-js/03-es6.html`**
@@ -936,7 +936,7 @@
 # Demo 13：DOM 操作实战
 
 > ⬆ [上一章：Demo 12](#demo-12es6-语法练习) | ⬇ [下一章：Demo 14](#demo-14事件处理实战) | [返回目录](#目录)
-> 📖 [点击跳转到对应知识点：DOM 操作](前端知识点.md#14-dom-操作核心)
+> 📖 [点击跳转到对应知识点：DOM 操作](前端知识点.md#17-dom-操作核心)
 
 📁 **文件位置：`my-project/src/main/resources/static/week3-js/04-dom.html`**
 
@@ -1003,7 +1003,7 @@
 # Demo 14：事件处理实战
 
 > ⬆ [上一章：Demo 13](#demo-13dom-操作实战) | ⬇ [下一章：Demo 15](#demo-15fetch-请求实战) | [返回目录](#目录)
-> 📖 [点击跳转到对应知识点：事件机制](前端知识点.md#15-事件机制)
+> 📖 [点击跳转到对应知识点：事件机制](前端知识点.md#18-事件机制)
 
 📁 **文件位置：`my-project/src/main/resources/static/week3-js/05-event.html`**
 
@@ -1062,7 +1062,7 @@
 # Demo 15：fetch 请求实战
 
 > ⬆ [上一章：Demo 14](#demo-14事件处理实战) | ⬇ [下一章：Demo 16](#demo-16完整联调实战) | [返回目录](#目录)
-> 📖 [点击跳转到对应知识点：fetch 发送请求](前端知识点.md#17-fetch-发送请求核心)
+> 📖 [点击跳转到对应知识点：fetch 发送请求](前端知识点.md#20-fetch-发送请求核心)
 > 📖 [点击跳转到 SpringBoot 知识点：前端调用接口](SpringBoot知识点.md#9-前端调用接口)
 
 📁 **文件位置：`my-project/src/main/resources/static/week3-js/06-fetch.html`**
