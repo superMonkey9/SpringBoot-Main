@@ -519,45 +519,45 @@
     <title>Flex 布局练习</title>
     <style>
         .demo {
-            margin: 20px 0;
-            padding: 10px;
-            border: 1px solid #ccc;
+            margin: 20px 0;             /* 外边距：上下20px，左右0 */
+            padding: 10px;              /* 内边距：四周10px */
+            border: 1px solid #ccc;     /* 边框：1像素 实线 浅灰色 */
         }
 
         .flex-container {
-            display: flex;
-            height: 80px;
-            background-color: #f5f5f5;
+            display: flex;              /* 显示模式：弹性布局 */
+            height: 80px;               /* 高度 */
+            background-color: #f5f5f5;  /* 背景颜色（浅灰色） */
         }
 
         .flex-item {
-            width: 80px;
-            height: 40px;
-            background-color: #4CAF50;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 5px;
-            border-radius: 4px;
+            width: 80px;                /* 宽度 */
+            height: 40px;               /* 高度 */
+            background-color: #4CAF50;  /* 背景颜色（绿色） */
+            color: white;               /* 文字颜色（白色） */
+            display: flex;              /* 显示模式：弹性布局 */
+            align-items: center;        /* 交叉轴对齐：垂直居中 */
+            justify-content: center;    /* 主轴对齐：水平居中 */
+            margin: 5px;                /* 外边距：盒子之间的间距 */
+            border-radius: 4px;         /* 圆角：4像素的圆角 */
         }
 
         /* 水平垂直居中 */
         .center {
-            justify-content: center;
-            align-items: center;
+            justify-content: center;    /* 主轴对齐：水平居中 */
+            align-items: center;        /* 交叉轴对齐：垂直居中 */
         }
 
         /* 两端对齐 */
         .space-between {
-            justify-content: space-between;
-            align-items: center;
+            justify-content: space-between;  /* 主轴对齐：两端对齐（中间均匀分布） */
+            align-items: center;             /* 交叉轴对齐：垂直居中 */
         }
 
         /* 垂直排列 */
         .column {
-            flex-direction: column;
-            align-items: center;
+            flex-direction: column;     /* 弹性方向：垂直排列（从上到下） */
+            align-items: center;        /* 交叉轴对齐：水平居中 */
         }
     </style>
 </head>
