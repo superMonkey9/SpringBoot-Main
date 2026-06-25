@@ -16,7 +16,7 @@
 - [Demo 5：用户表格](#demo-5用户表格)
 - [Demo 6：CSS 选择器练习](#demo-6css-选择器练习)
 - [Demo 7：盒模型练习](#demo-7盒模型练习)
-- [Demo 8：Flex 布局实战](#demo-flex-布局实战)
+- [Demo 8：Flex 布局实战](#demo-8-flex-布局实战)
 - [Demo 9：定位练习](#demo-9定位练习)
 - [Demo 10：JS 基础语法练习](#demo-10js-基础语法练习)
 - [Demo 11：数组和对象练习](#demo-11数组和对象练习)
@@ -439,7 +439,7 @@
 
 # Demo 7：盒模型练习
 
-> ⬆ [上一章：Demo 6](#demo-6css-选择器练习) | ⬇ [下一章：Demo 8](#demo-flex-布局实战) | [返回目录](#目录)
+> ⬆ [上一章：Demo 6](#demo-6css-选择器练习) | ⬇ [下一章：Demo 8](#demo-8-flex-布局实战) | [返回目录](#目录)
 > 📖 [点击跳转到对应知识点：盒模型](前端知识点.md#9-盒模型核心)
 
 📁 **文件位置：`my-project/src/main/resources/static/week2-css/02-box-model.html`**
@@ -605,7 +605,7 @@
 
 # Demo 9：定位练习
 
-> ⬆ [上一章：Demo 8](#demo-flex-布局实战) | ⬇ [下一章：Demo 10](#demo-10js-基础语法练习) | [返回目录](#目录)
+> ⬆ [上一章：Demo 8](#demo-8-flex-布局实战) | ⬇ [下一章：Demo 10](#demo-10js-基础语法练习) | [返回目录](#目录)
 > 📖 [点击跳转到对应知识点：定位](前端知识点.md#13-定位)
 
 📁 **文件位置：`my-project/src/main/resources/static/week2-css/04-position.html`**
