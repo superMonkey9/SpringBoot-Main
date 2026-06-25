@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Flex 布局联系</title>
+    <style>
+        .demo{
+            max-width: 20px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+        .flex-container {
+            display: flex;
+            height: 80px;
+            background-color: #f5f5f5;
+        }
+
+        .flex-item {
+            width: 80px;
+            height: 40px;
+            background-color: #4CAF50;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 5px;
+            border-radius: 4px;
+        }
+
+        /* 水平垂直居中 */
+        .center {
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 两端对齐 */
+        .space-between {
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* 垂直排列 */
+        .column {
+            flex-direction: column;
+            align-items: center;
+        }
+
+    </style>
+</head>
+<body>
+<h1>Flex 布局练习</h1>
+
+<h3>1. 默认排列（flex-start）</h3>
+<div class="demo flex-container">
+    <div class="flex-item">1</div>
+    <div class="flex-item">2</div>
+    <div class="flex-item">3</div>
+</div>
+
+<h3>2. 水平垂直居中</h3>
+<div class="demo flex-container center">
+    <div class="flex-item">居中</div>
+</div>
+
+<h3>3. 两端对齐（space-between）</h3>
+<div class="demo flex-container space-between">
+    <div class="flex-item">左</div>
+    <div class="flex-item">中</div>
+    <div class="flex-item">右</div>
+</div>
+
+<h3>4. 垂直排列（column）</h3>
+<div class="demo flex-container column">
+    <div class="flex-item">A</div>
+    <div class="flex-item">B</div>
+    <div class="flex-item">C</div>
+</div>
+</body>
+</html>
