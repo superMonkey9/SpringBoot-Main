@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>响应式布局实例</title>
+
+    <style>
+        /* ========================================
+           第一部分：默认样式（手机看的）
+           不用 @media，直接写
+           ======================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        /* 导航栏 */
+        .nav {
+            background-color: #333;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+
+        /* 页面容器：手机上铺满 */
+        .container {
+            width: 100%;
+            padding: 10px;
+        }
+
+        /* 标题：手机上小一点 */
+        .title {
+            font-size: 20px;
+            color: #333;
+            margin: 15px 0;
+        }
+
+        /* 卡片列表：手机上垂直排列 */
+        .card-list {
+            display: flex;
+            flex-direction: column;   /* 手机：竖着排 */
+            gap: 10px;
+        }
+
+        /* 单个卡片 */
+        .card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .card h3 {
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+
+        /* 侧边栏：手机上显示在底部 */
+        .sidebar {
+            background-color: #fff3cd;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 8px;
+        }
+
+        /* 底部信息 */
+        .footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+
+        /* ========================================
+           第二部分：平板样式（屏幕 >= 768px）
+           @media 里只写"需要变的"！
+           ======================================== */
+        @media (min-width: 768px) {
+
+            .container {
+                width: 750px;           /* 平板：固定宽度 */
+                margin: 0 auto;         /* 居中 */
+            }
+
+            .title {
+                font-size: 28px;        /* 平板：标题大一点 */
+            }
+
+            .card-list {
+                flex-direction: row;    /* 平板：横着排 */
+                flex-wrap: wrap;        /* 允许换行 */
+            }
+
+            .card {
+                width: 48%;             /* 平板：一行两个卡片 */
+            }
+        }
+
+
+        /* ========================================
+           第三部分：电脑样式（屏幕 >= 1024px）
+           @media 里只写"需要变的"！
+           ======================================== */
+        @media (min-width: 1024px) {
+
+            .container {
+                width: 960px;           /* 电脑：更宽 */
+            }
+
+            .title {
+                font-size: 32px;        /* 电脑：标题更大 */
+            }
+
+            .card {
+                width: 31%;             /* 电脑：一行三个卡片 */
+            }
+
+            .sidebar {
+                background-color: #d4edda;  /* 电脑：换个颜色 */
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 导航栏：所有设备都一样，不用写媒体查询 -->
+    <div class="nav">
+        我的响应式网站
+    </div>
+
+    <!-- 页面容器：宽度随屏幕变化（写了媒体查询） -->
+    <div class="container">
+
+        <!-- 标题：字号随屏幕变化（写了媒体查询） -->
+        <h1 class="title">欢迎来到我的网站</h1>
+
+        <!-- 卡片列表：排列方式随屏幕变化（写了媒体查询） -->
+        <div class="card-list">
+            <div class="card">
+                <h3>卡片 1</h3>
+                <p>手机上竖排，平板上两个一行，电脑上三个一行</p>
+            </div>
+            <div class="card">
+                <h3>卡片 2</h3>
+                <p>这就是响应式布局的效果！</p>
+            </div>
+            <div class="card">
+                <h3>卡片 3</h3>
+                <p>试试拖动浏览器窗口大小看看效果</p>
+            </div>
+        </div>
+
+        <!-- 侧边栏：颜色随屏幕变化（写了媒体查询） -->
+        <div class="sidebar">
+            <p>📱 提示：试试改变浏览器窗口大小，观察布局变化！</p>
+        </div>
+
+        <!-- 底部：所有设备都一样，不用写媒体查询 -->
+        <div class="footer">
+            <p>底部信息 — 这里不需要响应式，所以没写媒体查询</p>
+        </div>
+
+    </div>
+</body>
+</html>
