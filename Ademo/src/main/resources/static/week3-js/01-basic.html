@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>JS 基础语法练习</title>
+</head>
+<body>
+<h1>JS 基础语法练习</h1>
+<buttonb onclick="testVariables()">测试变量</buttonb>
+<buttonb onclick="testCondition()">测试条件判断</buttonb>
+<buttonb onclick="testLoop()">测试循环</buttonb>
+<buttonb onclick="testFunction()">测试函数</buttonb>
+<p id="output"></p>
+
+<script>
+    const testVariables =()=>{
+        let name='张三';
+        const age =18;
+        let msg=`我叫${name}，今年${age}岁`;
+        document.getElementById('output').textContent=msg;
+    }
+
+    const testCondition =()=>{
+        let score=85;
+        let result;
+        if(score>=90){
+            result=' 优秀';
+        }else if(score>=60){
+            result='合格';
+        }else{
+            result='不及格';
+        }
+        document.getElementById('output').textContent=`分数${score},评价${result}`  ;
+    }
+
+    const testLoop=()=>{
+        let fruits=['苹果','香蕉','橘子','葡萄'];
+        let msg='';
+        for(let fruit of fruits){
+            msg+=fruit+',';
+        }
+        document.getElementById('output').textContent='水果：' + msg.slice(0, -1);
+    }
+
+    const testFunction=()=>{
+        const add = (a, b) => a + b;
+        const result = add(10, 20);
+        document.getElementById('output').textContent = `10 + 20 = ${result}`;
+    }
+</script>
+</body>
+</html>

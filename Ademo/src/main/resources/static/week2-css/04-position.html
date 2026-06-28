@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>定位练习</title>
+    <style>
+        /*固定导航栏*/
+         .navbar{
+             position: fixed;
+             top: 0;
+             left: 0;
+             width: 100%;
+             height: 50px;
+             background-color: #333;
+             color: white;
+             display: flex;
+             align-items: center;
+             padding: 0 20px;
+             z-index:999;
+         }
+
+        body {
+            padding-top: 60px;  /* 给导航栏留空间 */
+        }
+
+        /* 弹窗示例 */
+        .card {
+            position: relative;  /* ⭐ 给子元素 absolute 定位做参考 */
+            width: 300px;
+            height: 150px;
+            border: 1px solid #ccc;
+            margin: 20px;
+            padding: 10px;
+        }
+
+        .close-btn {
+            position: absolute;  /* ⭐ 相对于 .card 定位 */
+            top: 5px;
+            right: 10px;
+            cursor: pointer;
+            background: red;
+            color: white;
+            border: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+        }
+    </style>
+
+</head>
+<body>
+<div class="navbar">固定导航栏</div>
+
+<h1>定位练习</h1>
+
+<div class="card">
+    <span>这是一个卡片</span>
+    <button class="close-btn">X</button>
+</div>
+
+<p>滚动页面试试，导航栏会固定在顶部！</p>
+
+</body>
+</html>
