@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Es6 语法练习</title>
+</head>
+<body>
+<h1>Es6 语法练习</h1>
+<button onclick="test1()">模板字符串</button>
+<button onclick="test2()">对象解构</button>
+<button onclick="test3()">展开运算符</button>
+<button onclick="test4()">箭头函数</button>
+<pre id="output"></pre>
+<script>
+const output = document.getElementById('output')
+
+const test1=()=>{
+    let name=`赵子媛`;
+    let age=18;
+    let height=165;
+    let msg=`我叫${name}，今年${age}岁，身高是${height}`;
+    output.textContent=msg;
+}
+
+// 箭头函数
+const test2 = () => {
+    const double = x => x * 2;
+    const add = (a, b) => a + b;
+    output.textContent =
+        `double(5) = ${double(5)}\n` +
+        `add(3, 7) = ${add(3, 7)}`;
+};
+
+// 解构赋值
+const test3 = () => {
+    let user = { name: '李四', age: 25, email: 'lisi@example.com' };
+    let { name, age, email } = user;
+    output.textContent = `name: ${name}\nage: ${age}\nemail: ${email}`;
+};
+
+// 展开运算符
+const test4 = () => {
+    let arr1 = [1, 2, 3];
+    let arr2 = [...arr1, 4, 5];
+    let user = { name: '王五', age: 30 };
+    let newUser = { ...user, id: 1 };
+    output.textContent =
+        `展开数组: [${arr2}]\n` +
+        `展开对象: ${JSON.stringify(newUser)}`;
+};
+</script>
+</body>
+</html>

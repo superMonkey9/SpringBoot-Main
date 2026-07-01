@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>数组和对象练习</title>
+</head>
+<body>
+<h1>数组和对象练习</h1>
+<button onclick="testArry()">测试数组</button>
+<button onclick="testObject()">测试对象</button>
+<pre id="output"></pre>
+<script>
+    const output = document.getElementById('output');
+
+    const testArry =()=>{
+        let arr=[1,2,3,4,5];
+
+        arr.push(6);
+
+        let doubled =arr.map(item=>item*2);
+
+        let big=arr.filter(item=>item>3);
+
+        let msg = '';
+        arr.forEach((item, index) => {
+            msg += `[${index}] = ${item}\n`;
+        });
+
+        output.textContent=
+            `原数组: ${arr}\n` +
+            `翻倍: ${doubled}\n` +
+            `大于3: ${big}\n` +
+            `遍历:\n${msg}`;
+    };
+
+    const testObject = () => {
+        let user = {
+            name: '张三',
+            age: 18,
+            email: 'zhangsan@example.com'
+        };
+
+        // 访问
+        let msg = `姓名: ${user.name}\n`;
+        msg += `年龄: ${user.age}\n`;
+
+        // 修改
+        user.age = 20;
+        msg += `修改后年龄: ${user.age}\n`;
+
+        // 添加属性
+        user.phone = '13800138000';
+        msg += `电话: ${user.phone}\n`;
+
+        // 解构
+        let { name, email } = user;
+        msg += `解构: name=${name}, email=${email}`;
+
+        output.textContent = msg;
+    };
+</script>
+
+</body>
+</html>
